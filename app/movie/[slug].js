@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { movieService } from '@/src/services/api';
 import { Play, Share2, Info } from 'lucide-react-native';
+import RenderHtml from 'react-native-render-html';
 
 const MovieDetailScreen = () => {
   const { slug } = useLocalSearchParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
       try {
         const response = await movieService.getMovieDetail(slug);
         const data = response?.data?.data?.movie;
+
         const cleanUrl = (url) => {
           if (!url) return null;
           return encodeURI(url.replace(/`/g, '').trim().replace(/\s+/g, ' '));
@@ -34,6 +37,7 @@ const MovieDetailScreen = () => {
         setLoading(false);
       }
     };
+
     fetchMovieDetail();
   }, [slug]);
 
@@ -56,10 +60,10 @@ const MovieDetailScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: movie.backdrop || movie.poster }} style={styles.backdrop} />
-      
+
       <View style={styles.content}>
         <Text style={styles.title}>{movie.title}</Text>
-        
+
         <View style={styles.meta}>
           <Text style={styles.metaText}>{movie.release_year}</Text>
           <View style={styles.dot} />
@@ -68,9 +72,11 @@ const MovieDetailScreen = () => {
           <Text style={styles.metaText}>{movie.genre}</Text>
         </View>
 
-        <TouchableOpacity 
-          style={styles.playButton} 
-          onPress={() => router.push(`/video/${movie.slug}?videoUrl=${encodeURIComponent(movie.video_url)}`)}
+        <TouchableOpacity
+          style={styles.playButton}
+          onPress={() =>
+            router.push(`/video/${movie.slug}?videoUrl=${encodeURIComponent(movie.video_url)}`)
+          }
         >
           <Play fill="black" color="black" size={24} />
           <Text style={styles.playButtonText}>Watch Now</Text>
@@ -81,13 +87,19 @@ const MovieDetailScreen = () => {
             <Share2 color="white" />
             <Text style={styles.actionText}>Share</Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.actionItem}>
             <Info color="white" />
             <Text style={styles.actionText}>Info</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.description}>{movie.description}</Text>
+        {/* HTML description render */}
+        <RenderHtml
+          contentWidth={width}
+          source={{ html: movie.description || '' }}
+          baseStyle={styles.description}
+        />
       </View>
     </ScrollView>
   );
@@ -104,14 +116,14 @@ const styles = StyleSheet.create({
   meta: { flexDirection: 'row', alignItems: 'center', marginTop: 10, marginBottom: 20 },
   metaText: { color: '#aaa', fontSize: 14 },
   dot: { width: 4, height: 4, borderRadius: 2, backgroundColor: '#555', marginHorizontal: 10 },
-  playButton: { 
-    flexDirection: 'row', 
-    backgroundColor: 'white', 
-    padding: 15, 
-    borderRadius: 8, 
-    alignItems: 'center', 
+  playButton: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20 
+    marginBottom: 20
   },
   playButtonText: { color: 'black', fontSize: 18, fontWeight: 'bold', marginLeft: 10 },
   actionRow: { flexDirection: 'row', marginBottom: 25 },
