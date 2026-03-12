@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ott",
-    "slug": "ott",
+    "slug": "fcpbportal",
     "version": "1.0.0",
     "scheme": "ott",
     "orientation": "portrait",
@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.appantech.fcpbportal",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,13 +25,21 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "com.appantech.fcpbportal"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "af496fb6-b688-4c82-891c-84bfb8581660"
+      }
+    },
+    "owner": "appantechs-organization"
   }
 }
