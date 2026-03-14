@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "ott",
+    "name": "FcpbPortal",
     "slug": "fcpbportal",
     "version": "1.0.0",
-    "scheme": "ott",
+    "scheme": "fcpbportal",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -32,7 +32,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-web-browser"
     ],
     "extra": {
       "router": {},

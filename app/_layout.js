@@ -35,6 +35,8 @@ const LayoutContent = () => {
       <Stack.Screen name="blog" options={{ headerShown: true, title: 'Blog', headerStyle: { backgroundColor: '#121212' }, headerTintColor: 'white' }} />
       <Stack.Screen name="blog/[slug]" options={{ headerShown: true, title: 'Blog Post', headerStyle: { backgroundColor: '#121212' }, headerTintColor: 'white' }} />
       <Stack.Screen name="search" options={{ headerShown: true, title: 'Search', headerStyle: { backgroundColor: '#121212' }, headerTintColor: 'white' }} />
+      <Stack.Screen name="subscriptions" options={{ headerShown: true, title: 'Subscriptions', headerStyle: { backgroundColor: '#121212' }, headerTintColor: 'white' }} />
+      <Stack.Screen name="profile-edit" options={{ headerShown: false }} />
     </Stack>
   );
 };

@@ -18,11 +18,16 @@ export const AuthProvider = ({ children }) => {
           console.log('[AuthContext] Token found. Fetching user...');
           setToken(storedToken);
           const response = await authService.getUser();
-          setUser(response.data.data);
+          console.log('[AuthContext] GetUser response:', response.data);
+          
+          const userData = response.data.data || response.data;
+          setUser(userData);
           console.log('[AuthContext] User fetched successfully.');
+        } else {
+          console.log('[AuthContext] No token found.');
         }
       } catch (error) {
-        console.error('[AuthContext] Error during initial auth check:', error);
+        console.error('[AuthContext] Error during initial auth check:', error.response?.data || error.message);
       } finally {
         console.log('[AuthContext] Auth check finished. Hiding splash screen.');
         setLoading(false);
@@ -33,17 +38,58 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('[AuthContext] Attempting login for:', email);
       const response = await authService.login(email, password);
-      const { token, user } = response.data.data;
+      console.log('[AuthContext] Login response:', response.data);
+      
+      const responseData = response.data.data || response.data;
+      const { token, user } = responseData;
+      
+      if (!token || !user) {
+        console.error('[AuthContext] Missing token or user in response:', responseData);
+        return { success: false, message: 'Invalid response from server' };
+      }
+
       await SecureStore.setItemAsync('userToken', token);
       setToken(token);
       setUser(user);
       return { success: true };
     } catch (error) {
-      console.error('Login failed:', JSON.stringify(error.response?.data, null, 2));
-      return { success: false, message: error.response?.data?.message || 'Login failed' };
+      console.error('Login failed:', JSON.stringify(error.response?.data, null, 2) || error.message);
+      return { success: false, message: error.response?.data?.message || error.message || 'Login failed' };
     }
   };
+
+  const socialLogin = async (provider, data) => {
+     try {
+       console.log(`[AuthContext] Attempting social login for: ${provider}`);
+       
+       let responseData;
+       if (provider === 'direct') {
+         // Data already contains token and user from deep link
+         responseData = data;
+       } else {
+         const response = await authService.socialLogin(provider, data);
+         console.log('[AuthContext] Social login response:', response.data);
+         responseData = response.data.data || response.data;
+       }
+       
+       const { token, user } = responseData;
+       
+       if (!token || !user) {
+         console.error('[AuthContext] Missing token or user in response:', responseData);
+         return { success: false, message: 'Invalid response from server' };
+       }
+ 
+       await SecureStore.setItemAsync('userToken', token);
+       setToken(token);
+       setUser(user);
+       return { success: true };
+     } catch (error) {
+       console.error('Social login failed:', JSON.stringify(error.response?.data, null, 2) || error.message);
+       return { success: false, message: error.response?.data?.message || error.message || 'Social login failed' };
+     }
+   };
 
   const logout = async () => {
     try {
@@ -58,7 +104,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, socialLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );

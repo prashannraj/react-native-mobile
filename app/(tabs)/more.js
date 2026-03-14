@@ -14,8 +14,8 @@ const MoreScreen = () => {
   };
 
   const menuItems = [
-    { title: 'My Profile', icon: <User color="white" />, onPress: () => {} },
-    { title: 'Subscriptions', icon: <CreditCard color="white" />, onPress: () => {} },
+    { title: 'My Profile', icon: <User color="white" />, onPress: () => router.push('/(tabs)/dashboard') },
+    { title: 'Subscriptions', icon: <CreditCard color="white" />, onPress: () => router.push('/subscriptions') },
     { title: 'Reels', icon: <PlayCircle color="white" />, onPress: () => router.push('/reels') },
     { title: 'Live TV', icon: <Radio color="white" />, onPress: () => router.push('/live') },
     { title: 'Blog', icon: <BookOpen color="white" />, onPress: () => router.push('/blog') },
@@ -51,6 +51,11 @@ const MoreScreen = () => {
           </TouchableOpacity>
         )}
       </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© 2026 Film and Mass Communication Promotion Board. All rights reserved.</Text>
+      </View>
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 };
@@ -65,7 +70,9 @@ const styles = StyleSheet.create({
   menuItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: '#222' },
   menuText: { fontSize: 16, color: 'white', marginLeft: 15 },
   logoutItem: { borderBottomWidth: 0, marginTop: 20 },
-  loginItem: { borderBottomWidth: 0, marginTop: 20 }
+  loginItem: { borderBottomWidth: 0, marginTop: 20 },
+  footer: { padding: 30, alignItems: 'center', borderTopWidth: 1, borderTopColor: '#222', marginTop: 20 },
+  footerText: { color: '#666', fontSize: 12, textAlign: 'center' }
 });
 
 export default MoreScreen;

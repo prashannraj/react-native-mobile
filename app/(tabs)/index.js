@@ -84,6 +84,10 @@ const HomeScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         showsHorizontalScrollIndicator={false}
       />
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© 2026 Film and Mass Communication Promotion Board. All rights reserved.</Text>
+      </View>
     </ScrollView>
   );
 };
@@ -94,7 +98,9 @@ const styles = StyleSheet.create({
   header: { fontSize: 20, fontWeight: 'bold', color: 'white', marginVertical: 15 },
   card: { width: 120, marginRight: 15 },
   poster: { width: 120, height: 180, borderRadius: 8 },
-  title: { color: 'white', marginTop: 5, fontSize: 14 }
+  title: { color: 'white', marginTop: 5, fontSize: 14 },
+  footer: { padding: 30, alignItems: 'center', borderTopWidth: 1, borderTopColor: '#222', marginTop: 20 },
+  footerText: { color: '#666', fontSize: 12, textAlign: 'center' }
 });
 
 export default HomeScreen;
